@@ -62,7 +62,7 @@ fallback_enabled = true
 fallback_provider = ollama
 
 [openai]
-api_key = sk-...
+api_key = sk-...           # Generate the api_key and update here
 model = gpt-3.5-turbo
 
 [ollama]
