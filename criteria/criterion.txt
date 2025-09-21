@@ -1,0 +1,5 @@
+The function `is_prime(n)` must:
+- Return True for integers >= 2 that are prime.
+- Return False for integers >= 2 that are composite.
+- Raise a ValueError for n < 2 or for non-integer inputs.
+- Work for inputs up to 10000 within reasonable time.
