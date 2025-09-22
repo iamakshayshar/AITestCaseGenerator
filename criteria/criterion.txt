@@ -1,5 +1,16 @@
-The function `is_prime(n)` must:
-- Return True for integers >= 2 that are prime.
-- Return False for integers >= 2 that are composite.
-- Raise a ValueError for n < 2 or for non-integer inputs.
-- Work for inputs up to 10000 within reasonable time.
+# Acceptance Criteria for UI Tests
+1. Login: Valid credentials should sign in the user and redirect to the dashboard within 3 seconds.
+2. Login: Incorrect password should display the message "Invalid email or password." without revealing which field is wrong.
+3. Login: Empty email or password fields should show inline validation errors.
+4. Signup: Password must meet strength rules (≥8 chars, uppercase, lowercase, number, special character). Weak passwords block submission.
+5. Signup: Duplicate email should return "An account with this email already exists."
+6. Search: Keyword queries should return relevant results within 2 seconds or show "No results found."
+7. Search: A single-character typo should trigger a suggestion (e.g., "Did you mean: iphone?").
+8. Cart: Adding an item updates cart count and subtotal immediately and persists across pages.
+9. Cart: Removing the last item should show an "empty cart" view.
+10. Checkout: Payment success should redirect to an order confirmation page. Payment failure should show a friendly error and allow retry.
+11. Profile: User should be able to update their display name, and changes should persist after page reload.
+12. Responsiveness: The cart page should render correctly at 320px viewport width without horizontal scrolling.
+13. Accessibility: All images must have meaningful alt text; decorative images must use empty alt="".
+14. Accessibility: Modals should trap keyboard focus and restore it when closed.
+15. Localization: Switching locale to French should update all UI labels and date formats correctly.

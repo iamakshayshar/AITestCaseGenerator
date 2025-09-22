@@ -1,8 +1,7 @@
 def build_prompt(criterion_text: str, target_framework: str = "pytest") -> dict:
     """Builds system and user prompt for the OpenAI API."""
     system = (
-        "As an expert software testing analyst, analyze the following test results and acceptance criteria coverage."
-        "When asked to provide code, output only the code file contents and nothing else."
+        "As an expert software testing analyst, analyze the acceptance criteria."
     )
 
     user = f"""

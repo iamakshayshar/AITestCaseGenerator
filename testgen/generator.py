@@ -5,6 +5,10 @@ from .llm_router import generate
 from .openai_client import DEFAULT_MODEL
 from .prompt import build_prompt
 from .reader import read_criterion
+import configparser
+from pathlib import Path
+from .excel_writer import write_excel_from_source
+
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = ROOT_DIR / "tests" / "test_generated.py"
@@ -46,6 +50,17 @@ def orchestrate(criterion_file: str, model: str = None):
     print(prompt_block['system'][:200] + ("..." if len(prompt_block['system']) > 200 else ""))
 
     model_to_use = model or DEFAULT_MODEL
+    try:
+        # prompt_block is a dict {system, user} from build_prompt
+        pb = prompt_block
+        # Create text the same way ollama_client does for string prompts; show first 800 chars
+        system = pb.get("system", "")
+        user = pb.get("user", "")
+        debug_prompt_text = ("[System]\\n" + system + "\\n\\n[User]\\n" + user).strip()
+        #print("[generator debug] Prompt to be sent (truncated):")
+        #print(debug_prompt_text[:800] + ("..." if len(debug_prompt_text) > 800 else ""))
+    except Exception:
+        pass
     response_text = generate(prompt_block, model=model_to_use)
 
     cleaned = strip_code_fence(response_text)
@@ -57,3 +72,20 @@ def orchestrate(criterion_file: str, model: str = None):
 
     write_output_file(cleaned)
     print(f"Wrote generated tests to {OUTPUT_PATH}")
+
+    # --- optional Excel export controlled via config.ini ---
+    # config path (project root / config.ini)
+    conf_path = Path(__file__).resolve().parents[1] / "config.ini"
+    if conf_path.exists():
+        cp = configparser.ConfigParser()
+        cp.read(conf_path)
+        excel_enabled = False
+        excel_path = None
+        if "export" in cp:
+            excel_enabled = cp["export"].getboolean("excel", fallback=False)
+            excel_path = cp["export"].get("excel_path", fallback=str(Path("tests") / "test_cases.xlsx"))
+        if excel_enabled:
+            # write excel using the generated source
+            write_excel_from_source(cleaned, excel_path)
+            print(f"Wrote generated tests to excel file at: {excel_path}")
+
